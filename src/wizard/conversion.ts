@@ -1,3 +1,5 @@
+import { join } from "node:path";
+import { readdirSync } from "node:fs";
 import type { AIEngine, GeneratedAssets } from "../ai/engine.js";
 import type { AIEngineType } from "../utils/config.js";
 import { ClaudeCodeEngine } from "../ai/claude-code.js";
@@ -5,6 +7,7 @@ import { ClaudeAPIEngine } from "../ai/claude-api.js";
 import { GeminiCLIEngine } from "../ai/gemini-cli.js";
 import { CodexCLIEngine } from "../ai/codex-cli.js";
 import { getConversionGuide } from "../ai/prompts.js";
+import { readFile, writeFile, fileExists } from "../utils/fs.js";
 import * as ui from "../prompts/prompter.js";
 
 function createEngine(type: AIEngineType): AIEngine {
@@ -66,7 +69,100 @@ export async function runConversion(opts: {
     "Conversion complete!"
   );
 
+  // Validate and fix template annotations + module meta
+  validateTemplates(opts.themePath);
+  validateModuleMeta(opts.themePath);
+
   await ui.outro("Files ready for upload!");
 
   return result;
+}
+
+/**
+ * Ensure all templates in templates/ have the required HubSpot annotations.
+ * Without `templateType: page` and `isAvailableForNewContent: true`,
+ * the template won't appear in HubSpot's template picker.
+ */
+function validateTemplates(themePath: string): void {
+  const templatesDir = join(themePath, "templates");
+  if (!fileExists(templatesDir)) return;
+
+  for (const file of readdirSync(templatesDir)) {
+    if (!file.endsWith(".html") || file === "base.html" || file.startsWith("system")) continue;
+
+    const filePath = join(templatesDir, file);
+    let content = readFile(filePath);
+
+    // Skip files that don't look like page templates
+    if (!content.includes("dnd_area") && !content.includes("extends")) continue;
+
+    const hasTemplateType = /templateType\s*:\s*page/i.test(content);
+    const hasAvailable = /isAvailableForNewContent\s*:\s*true/i.test(content);
+
+    if (hasTemplateType && hasAvailable) continue;
+
+    // Build the annotation block
+    const label = file.replace(".html", "").replace(/[-_]/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+
+    if (content.includes("<!--") && content.indexOf("-->") < 200) {
+      // Has an existing comment block at the top — patch it
+      const commentEnd = content.indexOf("-->");
+      let annotation = content.slice(0, commentEnd);
+
+      if (!hasTemplateType) {
+        annotation += "\n  templateType: page";
+      }
+      if (!hasAvailable) {
+        annotation += "\n  isAvailableForNewContent: true";
+      }
+      if (!/label\s*:/i.test(annotation)) {
+        annotation += `\n  label: ${label}`;
+      }
+
+      content = annotation + content.slice(commentEnd);
+    } else {
+      // No annotation block — prepend one
+      const block = `<!--\n  templateType: page\n  isAvailableForNewContent: true\n  label: ${label}\n-->\n`;
+      content = block + content;
+    }
+
+    writeFile(filePath, content);
+    ui.logSuccess(`Template "${file}" — annotations verified`);
+  }
+
+}
+
+/**
+ * Ensure all module meta.json files have the required fields for
+ * landing page compatibility.
+ */
+function validateModuleMeta(themePath: string): void {
+  const modulesDir = join(themePath, "modules");
+  if (!fileExists(modulesDir)) return;
+
+  for (const entry of readdirSync(modulesDir)) {
+    if (!entry.endsWith(".module")) continue;
+    const metaPath = join(modulesDir, entry, "meta.json");
+    if (!fileExists(metaPath)) continue;
+
+    try {
+      const meta = JSON.parse(readFile(metaPath));
+      let changed = false;
+
+      if (!meta.host_template_types || !meta.host_template_types.includes("PAGE")) {
+        meta.host_template_types = ["PAGE"];
+        changed = true;
+      }
+      if (!meta.is_available_for_new_content) {
+        meta.is_available_for_new_content = true;
+        changed = true;
+      }
+
+      if (changed) {
+        writeFile(metaPath, JSON.stringify(meta, null, 2) + "\n");
+      }
+    } catch {
+      // Skip malformed meta.json
+    }
+  }
 }
