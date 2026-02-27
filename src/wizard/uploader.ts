@@ -1,5 +1,5 @@
 import { join } from "node:path";
-import { readdirSync } from "node:fs";
+import { readdirSync, rmSync } from "node:fs";
 import { run } from "../utils/shell.js";
 import { readFile, writeFile, fileExists } from "../utils/fs.js";
 import * as ui from "../prompts/prompter.js";
@@ -43,6 +43,15 @@ function parseUploadErrors(stderr: string): UploadError[] {
     });
   }
 
+  // HubDB requires CMS Hub Pro/Enterprise
+  if (/hubdb|do not have access to hubdb/i.test(stderr)) {
+    errors.push({
+      file: "templates",
+      message: "HubDB requires CMS Hub Pro/Enterprise",
+      fixable: true,
+    });
+  }
+
   return errors;
 }
 
@@ -56,6 +65,9 @@ function autoFix(themePath: string, error: UploadError): boolean {
   }
   if (error.message.includes("now()")) {
     return fixNowFunction(themePath);
+  }
+  if (error.message.includes("HubDB")) {
+    return fixHubDbTemplates(themePath);
   }
   return false;
 }
@@ -120,6 +132,24 @@ function fixNowFunction(themePath: string): boolean {
     if (content.includes("now()")) {
       content = content.replace(/now\(\)/g, "local_dt");
       writeFile(htmlPath, content);
+      fixed = true;
+    }
+  }
+
+  return fixed;
+}
+
+function fixHubDbTemplates(themePath: string): boolean {
+  let fixed = false;
+  const templatesDir = join(themePath, "templates");
+  if (!fileExists(templatesDir)) return false;
+
+  for (const file of readdirSync(templatesDir)) {
+    if (!file.endsWith(".html")) continue;
+    const filePath = join(templatesDir, file);
+    const content = readFile(filePath);
+    if (content.includes("hubdb_table") || content.includes("hubdb_table_rows")) {
+      rmSync(filePath);
       fixed = true;
     }
   }
