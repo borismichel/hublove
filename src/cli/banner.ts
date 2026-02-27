@@ -1,6 +1,6 @@
 import { theme } from "./theme.js";
 
-const VERSION = "0.1.5";
+const VERSION = "0.1.6";
 
 export function printBanner() {
   const o = theme.accent; // HubSpot orange for "hub"

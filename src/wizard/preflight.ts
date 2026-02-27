@@ -16,6 +16,7 @@ import { theme } from "../cli/theme.js";
 
 export interface PreflightResult {
   aiEngine: AIEngineType;
+  model?: string;
   portalId: string;
   portalName: string;
 }
@@ -245,12 +246,26 @@ export async function runPreflight(): Promise<PreflightResult> {
     }
   }
 
+  // Model selection for Claude Code
+  let model: string | undefined;
+  if (aiEngine === "claude-code") {
+    model = await ui.select({
+      message: "Which model?",
+      options: [
+        { value: "sonnet", label: "Sonnet", hint: "fast, recommended" },
+        { value: "opus", label: "Opus", hint: "most capable" },
+        { value: "haiku", label: "Haiku", hint: "fastest, cheapest" },
+      ],
+    });
+  }
+
   saveConfig({ aiEngine });
 
   await ui.outro("Environment ready!");
 
   return {
     aiEngine,
+    model,
     portalId: auth.portalId,
     portalName: auth.portalName,
   };

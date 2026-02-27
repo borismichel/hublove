@@ -24,6 +24,7 @@ export async function wizardCommand(): Promise<void> {
   // Step 4: AI conversion
   await runConversion({
     aiEngine: preflight.aiEngine,
+    model: preflight.model,
     sourceDir: source.sourceDir,
     themePath: themeInfo.themePath,
   });

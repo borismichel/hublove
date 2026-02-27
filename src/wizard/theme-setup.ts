@@ -1,6 +1,7 @@
 import { join } from "node:path";
+import { renameSync } from "node:fs";
 import { run, runPassthrough } from "../utils/shell.js";
-import { fileExists, readFile, writeFile } from "../utils/fs.js";
+import { fileExists, readFile, writeFile, ensureDir } from "../utils/fs.js";
 import * as ui from "../prompts/prompter.js";
 import { theme } from "../cli/theme.js";
 
@@ -31,6 +32,9 @@ export async function setupTheme(): Promise<ThemeInfo> {
   let themeName: string;
   let themePath: string;
 
+  const workspaceDir = join(process.cwd(), "workspace");
+  ensureDir(workspaceDir);
+
   if (choice === "fetch") {
     themeName = await ui.text({
       message: "What's your theme name in HubSpot?",
@@ -39,7 +43,7 @@ export async function setupTheme(): Promise<ThemeInfo> {
         v.trim() ? undefined : "Theme name is required",
     });
 
-    themePath = join(process.cwd(), themeName);
+    themePath = join(workspaceDir, themeName);
 
     const s = await ui.spinner();
     s.start("Fetching theme from HubSpot...");
@@ -62,16 +66,23 @@ export async function setupTheme(): Promise<ThemeInfo> {
       defaultValue: "my-theme",
     });
 
-    themePath = join(process.cwd(), themeName);
+    themePath = join(workspaceDir, themeName);
 
     const s = await ui.spinner();
     s.start("Creating theme from boilerplate...");
 
+    // hs create always creates in process.cwd(), ignoring execSync cwd
     const result = run(`hs create website-theme "${themeName}"`);
     if (!result.success) {
       s.stop("Creation failed");
       ui.logError("Could not create theme. Try: hs create website-theme my-theme");
       process.exit(1);
+    }
+
+    // Move from cwd into workspace/
+    const createdAt = join(process.cwd(), themeName);
+    if (fileExists(createdAt) && createdAt !== themePath) {
+      renameSync(createdAt, themePath);
     }
 
     s.stop(`Theme created: ${theme.dim(themePath)}`);

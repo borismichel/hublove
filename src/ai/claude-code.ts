@@ -6,6 +6,12 @@ import { getConversionGuide } from "./prompts.js";
 import { readFile, fileExists } from "../utils/fs.js";
 
 export class ClaudeCodeEngine implements AIEngine {
+  private model?: string;
+
+  constructor(model?: string) {
+    this.model = model;
+  }
+
   async convert(opts: {
     sourceDir: string;
     themePath: string;
@@ -23,13 +29,18 @@ export class ClaudeCodeEngine implements AIEngine {
     // Use async spawn so the event loop stays free for spinner animation.
     // Prompt is piped via stdin to avoid shell interpretation of special chars.
     await new Promise<void>((resolve, reject) => {
-      const child = spawn(
-        "claude",
-        ["--print", "--allowedTools", "Write,Edit,Bash(hs upload*)"],
+      // Strip CLAUDECODE env var to allow running from inside a Claude Code session
+      const env = { ...process.env };
+      delete env.CLAUDECODE;
+
+      const args = ["--print", "--allowedTools", "Write,Edit,Bash(hs upload*)"];
+      if (this.model) args.push("--model", this.model);
+
+      const child = spawn("claude", args,
         {
           cwd: themePath,
           stdio: ["pipe", "pipe", "pipe"],
-          env: { ...process.env },
+          env,
         }
       );
 
@@ -46,6 +57,9 @@ export class ClaudeCodeEngine implements AIEngine {
           resolve();
         }
       });
+
+      // Handle stdin errors (EPIPE if claude exits before prompt is fully written)
+      child.stdin.on("error", () => {});
 
       // Send prompt via stdin and close
       child.stdin.write(prompt);

@@ -5,3 +5,5 @@ dist/
 LPAGE.md
 CLAUDE.md
 .claude/
+test/
+_validation_workspace/

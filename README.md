@@ -89,7 +89,7 @@ Type **y** and press Enter. It downloads hubLove and starts the wizard, which wa
 
 Once hubLove finishes uploading, your theme and modules are in HubSpot — but you still need to **create a landing page** that uses them:
 
-1. Go to **HubSpot** → **Marketing** → **Landing Pages** → **Create**
+1. Go to **HubSpot** → **Content** → **Landing Pages** → **Create**
 2. Choose **your uploaded theme** from the theme picker
 3. Select the landing page template that was just created
 4. Your converted modules will appear — drag them onto the page
@@ -127,7 +127,7 @@ Fetch your existing HubSpot theme or create a new one from the boilerplate. hubL
 
 ### AI Conversion
 
-Your chosen AI engine analyzes the React code and creates:
+Your chosen AI engine analyzes the React code and creates the HubSpot theme files. When using Claude Code, you can choose between Sonnet (fast), Opus (most capable), and Haiku (fastest/cheapest). The conversion creates:
 - **Shared CSS** — Design system variables, theme overrides, utilities
 - **Shared JS** — Scroll animations, interactive features (vanilla JS)
 - **Modules** — One per visual section, each with `fields.json`, `meta.json`, `module.html`, `module.css`

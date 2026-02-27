@@ -10,10 +10,10 @@ import { getConversionGuide } from "../ai/prompts.js";
 import { readFile, writeFile, fileExists } from "../utils/fs.js";
 import * as ui from "../prompts/prompter.js";
 
-function createEngine(type: AIEngineType): AIEngine {
+function createEngine(type: AIEngineType, model?: string): AIEngine {
   switch (type) {
     case "claude-code":
-      return new ClaudeCodeEngine();
+      return new ClaudeCodeEngine(model);
     case "gemini-cli":
       return new GeminiCLIEngine();
     case "codex-cli":
@@ -25,6 +25,7 @@ function createEngine(type: AIEngineType): AIEngine {
 
 export async function runConversion(opts: {
   aiEngine: AIEngineType;
+  model?: string;
   sourceDir: string;
   themePath: string;
 }): Promise<GeneratedAssets> {
@@ -35,12 +36,14 @@ export async function runConversion(opts: {
     "AI Conversion"
   );
 
-  const engine = createEngine(opts.aiEngine);
+  const engine = createEngine(opts.aiEngine, opts.model);
 
   const conversionGuide = getConversionGuide();
 
   const s = await ui.spinner();
   s.start("Starting AI conversion...");
+
+  const startTime = Date.now();
 
   const result = await engine.convert({
     sourceDir: opts.sourceDir,
@@ -51,7 +54,8 @@ export async function runConversion(opts: {
     },
   });
 
-  s.stop("All files generated");
+  const elapsed = ((Date.now() - startTime) / 1000).toFixed(0);
+  s.stop(`All files generated (${elapsed}s)`);
 
   // Summary
   const moduleCount = result.modules.length;
@@ -83,7 +87,7 @@ export async function runConversion(opts: {
  * Without `templateType: page` and `isAvailableForNewContent: true`,
  * the template won't appear in HubSpot's template picker.
  */
-function validateTemplates(themePath: string): void {
+export function validateTemplates(themePath: string): void {
   const templatesDir = join(themePath, "templates");
   if (!fileExists(templatesDir)) return;
 
@@ -136,7 +140,7 @@ function validateTemplates(themePath: string): void {
  * Ensure all module meta.json files have the required fields for
  * landing page compatibility.
  */
-function validateModuleMeta(themePath: string): void {
+export function validateModuleMeta(themePath: string): void {
   const modulesDir = join(themePath, "modules");
   if (!fileExists(modulesDir)) return;
 

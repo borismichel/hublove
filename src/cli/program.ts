@@ -13,7 +13,7 @@ export function buildProgram(): Command {
     .description(
       "Convert Lovable/React landing pages to HubSpot CMS — AI-powered CLI tool"
     )
-    .version("0.1.5")
+    .version("0.1.6")
     .action(wizardCommand);
 
   program
