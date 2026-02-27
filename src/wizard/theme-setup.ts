@@ -1,5 +1,5 @@
 import { join } from "node:path";
-import { renameSync } from "node:fs";
+import { readdirSync, renameSync } from "node:fs";
 import { run, runPassthrough } from "../utils/shell.js";
 import { fileExists, readFile, writeFile, ensureDir } from "../utils/fs.js";
 import * as ui from "../prompts/prompter.js";
@@ -71,17 +71,36 @@ export async function setupTheme(): Promise<ThemeInfo> {
     const s = await ui.spinner();
     s.start("Creating theme from boilerplate...");
 
+    // Snapshot cwd contents before hs create to detect what it creates
+    const cwdBefore = new Set(readdirSync(process.cwd()));
+
     // hs create always creates in process.cwd(), ignoring execSync cwd
     const result = run(`hs create website-theme "${themeName}"`);
-    if (!result.success) {
+
+    // Find the created directory — hs create may use exact name or a variant
+    let createdAt = join(process.cwd(), themeName);
+    if (!fileExists(createdAt)) {
+      // Fallback: find any new directory that appeared in cwd
+      const cwdAfter = readdirSync(process.cwd());
+      const newDir = cwdAfter.find((e) => !cwdBefore.has(e) && fileExists(join(process.cwd(), e)));
+      if (newDir) {
+        createdAt = join(process.cwd(), newDir);
+      }
+    }
+
+    if (!result.success || !fileExists(createdAt)) {
       s.stop("Creation failed");
-      ui.logError("Could not create theme. Try: hs create website-theme my-theme");
+      const errMsg = result.stderr || result.stdout || "";
+      ui.logError(
+        `Could not create theme "${themeName}".` +
+        (errMsg ? `\n${errMsg.slice(0, 300)}` : "") +
+        "\nTry running manually: hs create website-theme my-theme"
+      );
       process.exit(1);
     }
 
     // Move from cwd into workspace/
-    const createdAt = join(process.cwd(), themeName);
-    if (fileExists(createdAt) && createdAt !== themePath) {
+    if (createdAt !== themePath) {
       renameSync(createdAt, themePath);
     }
 

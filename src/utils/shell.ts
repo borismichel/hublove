@@ -2,6 +2,7 @@ import { execSync, type ExecSyncOptions } from "node:child_process";
 
 export interface ShellResult {
   stdout: string;
+  stderr: string;
   success: boolean;
 }
 
@@ -16,9 +17,12 @@ export function run(
       timeout: 120_000,
       ...options,
     }).trim();
-    return { stdout, success: true };
-  } catch {
-    return { stdout: "", success: false };
+    return { stdout, stderr: "", success: true };
+  } catch (err: unknown) {
+    const e = err as { stdout?: Buffer | string; stderr?: Buffer | string };
+    const stdout = (e.stdout ?? "").toString().trim();
+    const stderr = (e.stderr ?? "").toString().trim();
+    return { stdout, stderr, success: false };
   }
 }
 

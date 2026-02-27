@@ -1,6 +1,6 @@
 {
   "name": "hublove",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Convert Lovable/React landing pages to HubSpot CMS — AI-powered CLI tool",
   "type": "module",
   "bin": {
