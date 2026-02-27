@@ -1,0 +1,48 @@
+{
+  "name": "hublove",
+  "version": "0.1.4",
+  "description": "Convert Lovable/React landing pages to HubSpot CMS — AI-powered CLI tool",
+  "type": "module",
+  "bin": {
+    "hublove": "./bin/hublove.mjs"
+  },
+  "main": "./dist/index.js",
+  "files": [
+    "dist",
+    "bin",
+    "assets"
+  ],
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsup",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "@clack/prompts": "^0.9.1",
+    "chalk": "^5.4.1",
+    "commander": "^13.1.0",
+    "execa": "^9.5.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsup": "^8.4.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  },
+  "keywords": [
+    "hubspot",
+    "lovable",
+    "react",
+    "cms",
+    "converter",
+    "landing-page",
+    "cli"
+  ],
+  "author": "Boris Michel",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/borismichel/hublove.git"
+  }
+}
