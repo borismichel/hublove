@@ -12,7 +12,7 @@ export async function convertCommand(): Promise<void> {
 
   if (!config.aiEngine) {
     ui.logError(
-      "AI engine not configured. Run `hublove init` first or use the full wizard with `hublove`."
+      "AI engine not configured. Run `hubvibes init` first or use the full wizard with `hubvibes`."
     );
     process.exit(1);
   }

@@ -4,17 +4,17 @@ import { readFile, writeFile, fileExists } from "./fs.js";
 
 export type AIEngineType = "claude-code" | "api" | "gemini-cli" | "codex-cli";
 
-export interface HubLoveConfig {
+export interface HubVibesConfig {
   aiEngine?: AIEngineType;
   anthropicApiKey?: string;
   lastThemePath?: string;
   lastSourcePath?: string;
 }
 
-const CONFIG_DIR = join(homedir(), ".hublove");
+const CONFIG_DIR = join(homedir(), ".hubvibes");
 const CONFIG_PATH = join(CONFIG_DIR, "config.json");
 
-export function loadConfig(): HubLoveConfig {
+export function loadConfig(): HubVibesConfig {
   if (!fileExists(CONFIG_PATH)) return {};
 
   try {
@@ -24,7 +24,7 @@ export function loadConfig(): HubLoveConfig {
   }
 }
 
-export function saveConfig(config: HubLoveConfig): void {
+export function saveConfig(config: HubVibesConfig): void {
   const existing = loadConfig();
   const merged = { ...existing, ...config };
   writeFile(CONFIG_PATH, JSON.stringify(merged, null, 2));

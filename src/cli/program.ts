@@ -9,11 +9,11 @@ export function buildProgram(): Command {
   const program = new Command();
 
   program
-    .name("hublove")
+    .name("hubvibes")
     .description(
       "Convert Lovable/React landing pages to HubSpot CMS — AI-powered CLI tool"
     )
-    .version("0.1.7")
+    .version("0.2.0")
     .action(wizardCommand);
 
   program

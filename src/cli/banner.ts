@@ -1,20 +1,19 @@
 import { theme } from "./theme.js";
 
-const VERSION = "0.1.7";
+const VERSION = "0.2.0";
 
 export function printBanner() {
   const o = theme.accent; // HubSpot orange for "hub"
-  const p = theme.love;   // pink for heart + "Love"
+  const v = theme.vibes;  // purple for "Vibes" + wave
   const m = theme.muted;
 
-  // Block-pixel ASCII art: "hub ♥ Love"
-  // Fixed-width grid: hub(20) + heart(12) + love(24) = 56 chars per line
+  // Block-pixel ASCII art: "hub ≋ Vibes"
   const lines = [
-    `${o("██  ██ ██  ██ █████ ")}${p(" ▄██▄ ▄██▄  ")}${p("██     ▄▄▄  ██  ██ ▄▄▄▄▄")}`,
-    `${o("██  ██ ██  ██ ██  ██")}${p(" ██████████ ")}${p("██    ██ ██ ██  ██ ██   ")}`,
-    `${o("██▀▀██ ██  ██ █████ ")}${p("  ████████  ")}${p("██    ██ ██ ██  ██ ████ ")}`,
-    `${o("██  ██ ██  ██ ██  ██")}${p("   ██████   ")}${p("██    ██ ██ ▀█▄▄█▀ ██   ")}`,
-    `${o("██  ██  ████  █████ ")}${p("    ▀██▀    ")}${p("█████  ▀▀▀   ▀▀▀▀  ▀▀▀▀▀")}`,
+    `${o("██  ██ ██  ██ █████ ")}${v(" ≋≋≋≋≋≋≋≋  ")}${v("██  ██ ██ █████  ▄▄▄▄▄ ▄▄▄▄▄")}`,
+    `${o("██  ██ ██  ██ ██  ██")}${v("  ≋≋≋≋≋≋   ")}${v("██  ██ ██ ██  ██ ██    ██   ")}`,
+    `${o("██▀▀██ ██  ██ █████ ")}${v("   ≋≋≋≋    ")}${v("██  ██ ██ █████  ████  ▀▀▀▄ ")}`,
+    `${o("██  ██ ██  ██ ██  ██")}${v("  ≋≋≋≋≋≋   ")}${v(" █▄▄█▀ ██ ██  ██ ██       ██")}`,
+    `${o("██  ██  ████  █████ ")}${v(" ≋≋≋≋≋≋≋≋  ")}${v("  ▀▀▀  ██ █████  ▀▀▀▀▀ ▀▀▀▀ ")}`,
   ];
 
   console.log();

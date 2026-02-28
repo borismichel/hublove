@@ -8,7 +8,7 @@ export const palette = {
   warn: "#FFB020",
   error: "#E23D2D",
   muted: "#8B8D91",
-  love: "#FF4081",
+  vibes: "#00BDD6",
 };
 
 const noColor = !!process.env.NO_COLOR;
@@ -25,7 +25,7 @@ export const theme = {
   warn: hex(palette.warn),
   error: hex(palette.error),
   muted: hex(palette.muted),
-  love: hex(palette.love),
+  vibes: hex(palette.vibes),
   heading: noColor ? chalk.bold : chalk.bold.hex(palette.accent),
   command: hex(palette.accentBright),
   dim: chalk.dim,

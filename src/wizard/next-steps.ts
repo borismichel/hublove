@@ -85,5 +85,5 @@ export async function showNextSteps(opts: {
     }
   }
 
-  await ui.outro(`Thanks for using hub${theme.love("Love")}! ${theme.love("♥")}`);
+  await ui.outro(`Thanks for using hub${theme.vibes("Vibes")}! ${theme.vibes("~")}`);
 }

@@ -128,11 +128,11 @@ export class ClaudeCodeEngine implements AIEngine {
     }
 
     // Write full log to workspace for debugging
-    const logPath = join(themePath, "..", "hublove-conversion.log");
+    const logPath = join(themePath, "..", "hubvibes-conversion.log");
     try {
       const timestamp = new Date().toISOString();
       const logContent = [
-        `=== hubLove Conversion Log ===`,
+        `=== hubVibes Conversion Log ===`,
         `Timestamp: ${timestamp}`,
         `Source: ${sourceDir}`,
         `Theme: ${themePath}`,

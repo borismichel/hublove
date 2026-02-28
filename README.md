@@ -1,20 +1,20 @@
-# hubLove
+# hubVibes
 
 Convert Lovable/React landing pages to HubSpot CMS — AI-powered CLI tool.
 
 ```
-  ██  ██ ██  ██ █████  ▄██▄ ▄██▄  ██     ▄▄▄  ██  ██ ▄▄▄▄▄
-  ██  ██ ██  ██ ██  ██ ██████████ ██    ██ ██ ██  ██ ██
-  ██▀▀██ ██  ██ █████   ████████  ██    ██ ██ ██  ██ ████
-  ██  ██ ██  ██ ██  ██   ██████   ██    ██ ██ ▀█▄▄█▀ ██
-  ██  ██  ████  █████     ▀██▀    █████  ▀▀▀   ▀▀▀▀  ▀▀▀▀▀
+  ██  ██ ██  ██ █████  ≋≋≋≋≋≋≋≋  ██  ██ ██ █████  ▄▄▄▄▄ ▄▄▄▄▄
+  ██  ██ ██  ██ ██  ██  ≋≋≋≋≋≋   ██  ██ ██ ██  ██ ██    ██
+  ██▀▀██ ██  ██ █████    ≋≋≋≋    ██  ██ ██ █████  ████  ▀▀▀▄
+  ██  ██ ██  ██ ██  ██  ≋≋≋≋≋≋    █▄▄█▀ ██ ██  ██ ██       ██
+  ██  ██  ████  █████  ≋≋≋≋≋≋≋≋    ▀▀▀  ██ █████  ▀▀▀▀▀ ▀▀▀▀
 
   Lovable / React  →  HubSpot CMS
 ```
 
 ## What It Does
 
-hubLove takes a React landing page (built with Lovable, v0, Bolt, or any React-based builder) and converts it into native HubSpot CMS modules — fully editable in the HubSpot page editor. No coding knowledge required.
+hubVibes takes a React landing page (built with Lovable, v0, Bolt, or any React-based builder) and converts it into native HubSpot CMS modules — fully editable in the HubSpot page editor. No coding knowledge required.
 
 It handles everything:
 - Checks your environment and installs missing tools
@@ -59,7 +59,7 @@ After installing, run `node -v` again to confirm it works.
 
 ### 2. Install an AI Engine
 
-hubLove needs an AI coding assistant to power the conversion. Install **one** of these (using `npm`, which comes bundled with Node.js):
+hubVibes needs an AI coding assistant to power the conversion. Install **one** of these (using `npm`, which comes bundled with Node.js):
 
 | Engine | Install | Notes |
 |--------|---------|-------|
@@ -68,26 +68,26 @@ hubLove needs an AI coding assistant to power the conversion. Install **one** of
 | [OpenAI Codex](https://github.com/openai/codex) | `npm install -g @openai/codex` | Uses your OpenAI account |
 | Anthropic API | No install — just need an API key | Get a key at [console.anthropic.com](https://console.anthropic.com) |
 
-### 3. Run hubLove
+### 3. Run hubVibes
 
 ```bash
-npx hublove
+npx hubvibes
 ```
 
 The first time you run this, npm will ask:
 
 ```
-Need to install the following packages: hublove
+Need to install the following packages: hubvibes
 Ok to proceed? (y)
 ```
 
-Type **y** and press Enter. It downloads hubLove and starts the wizard, which walks you through connecting to HubSpot, picking your AI engine, and converting your page.
+Type **y** and press Enter. It downloads hubVibes and starts the wizard, which walks you through connecting to HubSpot, picking your AI engine, and converting your page.
 
 > **Tip:** `npx` comes with Node.js. It downloads and runs tools without installing them permanently. After the first download, subsequent runs start immediately.
 
 ## After the Conversion
 
-Once hubLove finishes uploading, your theme and modules are in HubSpot — but you still need to **create a landing page** that uses them:
+Once hubVibes finishes uploading, your theme and modules are in HubSpot — but you still need to **create a landing page** that uses them:
 
 1. Go to **HubSpot** → **Content** → **Landing Pages** → **Create**
 2. Choose **your uploaded theme** from the theme picker
@@ -100,30 +100,30 @@ Once hubLove finishes uploading, your theme and modules are in HubSpot — but y
 ## Commands
 
 ```bash
-hublove              # Full interactive wizard (default)
-hublove init         # Check and install required tools
-hublove convert      # Convert a React project (no upload)
-hublove upload       # Upload theme to HubSpot
-hublove doctor       # Diagnose environment issues
+hubvibes              # Full interactive wizard (default)
+hubvibes init         # Check and install required tools
+hubvibes convert      # Convert a React project (no upload)
+hubvibes upload       # Upload theme to HubSpot
+hubvibes doctor       # Diagnose environment issues
 ```
 
-Most users only need `npx hublove` — the wizard handles everything.
+Most users only need `npx hubvibes` — the wizard handles everything.
 
 ## How It Works
 
 ### Environment Check
 
-hubLove checks for Node.js and the HubSpot CLI. If the HubSpot CLI is missing, it installs it for you via npm. If you're not authenticated, it runs `hs init` to connect your HubSpot portal.
+hubVibes checks for Node.js and the HubSpot CLI. If the HubSpot CLI is missing, it installs it for you via npm. If you're not authenticated, it runs `hs init` to connect your HubSpot portal.
 
 ### Source Setup
 
-Paste your GitHub URL or point to a local folder. hubLove analyzes the component structure — counting components, detecting Tailwind, identifying interactive patterns (carousels, accordions, animations).
+Paste your GitHub URL or point to a local folder. hubVibes analyzes the component structure — counting components, detecting Tailwind, identifying interactive patterns (carousels, accordions, animations).
 
 > **Note:** Cloning from GitHub requires Git. If you don't have Git installed, download your project as a ZIP, unzip it, and provide the local folder path instead.
 
 ### Theme Setup
 
-Fetch your existing HubSpot theme or create a new one from the boilerplate. hubLove validates the theme structure and auto-patches `base.html` to support custom CSS/JS loading if needed.
+Fetch your existing HubSpot theme or create a new one from the boilerplate. hubVibes validates the theme structure and auto-patches `base.html` to support custom CSS/JS loading if needed.
 
 ### AI Conversion
 
@@ -135,14 +135,14 @@ Your chosen AI engine analyzes the React code and creates the HubSpot theme file
 
 ### Upload & Auto-Fix
 
-hubLove uploads everything to HubSpot. If uploads fail (common with field type issues), it auto-fixes known problems and retries:
+hubVibes uploads everything to HubSpot. If uploads fail (common with field type issues), it auto-fixes known problems and retries:
 - `textarea` → `text` (deprecated field type)
 - `"name": "name"` → `"name": "item_name"` (reserved name)
 - `now()` → `local_dt` (invalid HubL function)
 
 ## Configuration
 
-Settings are saved in `~/.hublove/config.json` so you don't have to re-enter them:
+Settings are saved in `~/.hubvibes/config.json` so you don't have to re-enter them:
 - `aiEngine` — Your preferred AI engine (`claude-code`, `gemini-cli`, `codex-cli`, or `api`)
 - `lastThemePath` — Last used theme directory
 - `lastSourcePath` — Last used source directory
@@ -151,9 +151,9 @@ Settings are saved in `~/.hublove/config.json` so you don't have to re-enter the
 
 **"command not found: node"** — Node.js isn't installed or isn't in your PATH. Re-install from [nodejs.org](https://nodejs.org) and restart your terminal.
 
-**"hublove has not been built yet"** — You're running from source. Use `npx hublove` instead, or run `npm run build` first.
+**"hubVibes has not been built yet"** — You're running from source. Use `npx hubvibes` instead, or run `npm run build` first.
 
-**HubSpot upload keeps failing** — Run `hublove doctor` to check your setup. Make sure `hs accounts list` shows your portal.
+**HubSpot upload keeps failing** — Run `hubvibes doctor` to check your setup. Make sure `hs accounts list` shows your portal.
 
 **AI conversion is slow or times out** — This is normal for large pages. The conversion can take 2-5 minutes depending on the number of components.
 

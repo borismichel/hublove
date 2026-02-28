@@ -1,10 +1,10 @@
 {
-  "name": "hublove",
-  "version": "0.1.8",
+  "name": "hubvibes",
+  "version": "0.2.0",
   "description": "Convert Lovable/React landing pages to HubSpot CMS — AI-powered CLI tool",
   "type": "module",
   "bin": {
-    "hublove": "./bin/hublove.mjs"
+    "hubvibes": "bin/hubvibes.mjs"
   },
   "main": "./dist/index.js",
   "files": [
@@ -43,6 +43,6 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/borismichel/hublove.git"
+    "url": "git+https://github.com/borismichel/hubvibes.git"
   }
 }
